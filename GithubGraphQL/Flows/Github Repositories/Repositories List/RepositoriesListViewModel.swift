@@ -53,8 +53,8 @@ final class RepositoriesListViewModel {
         self.client.searchRepositories(mentioning: phrase) {[weak self] response in
             self?.isLoading = false
             switch response {
-                case let .failure(error):
-                self?.error = error.localizedDescription
+                case .failure:
+                self?.error = "The data could not be fetched, something went wrong"
                 case let .success(results):
                 self?.currentPageInfo = results.pageInfo
                 self?.repositories = results.repos
