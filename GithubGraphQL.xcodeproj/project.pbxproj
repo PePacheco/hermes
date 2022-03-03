@@ -108,6 +108,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6D79653E27D139E6001BA2A4 /* Repository Details */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Repository Details";
+			sourceTree = "<group>";
+		};
 		6DE08AB027D124D1003A2FA4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +137,7 @@
 		6DE08AB427D12535003A2FA4 /* Github Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				6D79653E27D139E6001BA2A4 /* Repository Details */,
 				6DE08AB527D1254B003A2FA4 /* Repositories List */,
 			);
 			path = "Github Repositories";

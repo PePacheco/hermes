@@ -27,6 +27,8 @@ class RepositoriesListViewController: UIViewController, Coordinating {
         cancellables.forEach { $0.cancel() }
     }
     
+    // MARK: - Private functions
+    
     private func bindViewModel() {
         viewModel.$repositories.sink {[weak self] repositories in
             DispatchQueue.main.async {

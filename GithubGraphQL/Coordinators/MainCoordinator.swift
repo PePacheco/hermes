@@ -13,7 +13,10 @@ class MainCoordinator: Coordinator {
     var navigationController: UINavigationController?
     
     func eventOccurred(with type: CoordinatorEvent) {
-        
+        switch type {
+        case .goToRepositoryDetails(let repositoryDetails):
+            break
+        }
     }
     
     func start() {

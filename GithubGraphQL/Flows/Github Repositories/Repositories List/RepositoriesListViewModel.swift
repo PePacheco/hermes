@@ -28,11 +28,6 @@ final class RepositoriesListViewModel {
                 self?.currentPageInfo = results.pageInfo
                 self?.repositories = results.repos
                 self?.isLoading = false
-                results.repos.forEach { repository in
-                    print(repository.name)
-                    print(repository.url)
-                    
-                }
             }
         }
     }
@@ -42,11 +37,13 @@ final class RepositoriesListCellViewModel {
     let url: String
     let userName: String
     let repositoryName: String
+    let userImageUrl: URL?
     
     init(with model: RepositoryDetails) {
         self.url = "URL: \(model.url)"
         self.repositoryName = "Repository name: \(model.name)"
         self.userName = "User: \(model.owner.login)"
+        self.userImageUrl = URL(string: model.owner.avatarUrl)
     }
     
 }
