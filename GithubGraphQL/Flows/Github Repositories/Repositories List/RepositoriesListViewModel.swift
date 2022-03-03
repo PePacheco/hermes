@@ -5,6 +5,7 @@ import UIKit
 final class RepositoriesListViewModel {
     
     private let client: GraphQLClient
+    private let queue = DispatchQueue(label: "ViewModelQueue", target: .global())
     var currentPageInfo: SearchRepositoriesQuery.Data.Search.PageInfo?
     
     @Published var isLoading: Bool = false
@@ -25,21 +26,24 @@ final class RepositoriesListViewModel {
     }
     
     func searchForward(phrase: String) {
-        guard let currentPageInfo = currentPageInfo, let nextCursor = currentPageInfo.endCursor else {
-            return
-        }
-        self.isFetching = true
-        if currentPageInfo.hasNextPage {
-            let cursor = Cursor(rawValue: nextCursor)
-            let filter = SearchRepositoriesQuery.Filter.before(cursor)
-            self.client.searchRepositories(mentioning: phrase, filter: filter) {[weak self] response in
-                switch response {
-                    case let .failure(error):
-                    self?.error = String(describing: error)
-                    case let .success(results):
-                    self?.currentPageInfo = results.pageInfo
-                    self?.repositories.append(contentsOf: results.repos)
-                    self?.isFetching = false
+        queue.async { [self] in
+            guard let currentPageInfo = currentPageInfo, let nextCursor = currentPageInfo.endCursor else {
+                return
+            }
+            self.isFetching = true
+            if currentPageInfo.hasNextPage {
+                print(nextCursor)
+                let cursor = Cursor(rawValue: nextCursor)
+                let filter = SearchRepositoriesQuery.Filter.before(cursor)
+                self.client.searchRepositories(mentioning: phrase, filter: filter) {[weak self] response in
+                    switch response {
+                        case let .failure(error):
+                        self?.error = String(describing: error)
+                        case let .success(results):
+                        self?.currentPageInfo = results.pageInfo
+                        self?.repositories.append(contentsOf: results.repos)
+                        self?.isFetching = false
+                    }
                 }
             }
         }
