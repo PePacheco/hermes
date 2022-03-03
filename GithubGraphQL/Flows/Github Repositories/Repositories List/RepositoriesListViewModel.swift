@@ -32,7 +32,6 @@ final class RepositoriesListViewModel {
             }
             self.isFetching = true
             if currentPageInfo.hasNextPage {
-                print(nextCursor)
                 let cursor = Cursor(rawValue: nextCursor)
                 let filter = SearchRepositoriesQuery.Filter.before(cursor)
                 self.client.searchRepositories(mentioning: phrase, filter: filter) {[weak self] response in
