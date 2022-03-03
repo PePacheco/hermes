@@ -22,31 +22,50 @@ final class RepositoriesListViewModel {
     func fetchRepositoryDetails(indexPath: IndexPath) -> RepositoryDetails {
         return repositories[indexPath.row]
     }
+    
+    func searchForward(phrase: String) {
+        guard let currentPageInfo = currentPageInfo, let nextCursor = currentPageInfo.endCursor else {
+            return
+        }
+        if currentPageInfo.hasNextPage {
+            let cursor = Cursor(rawValue: nextCursor)
+            let filter = SearchRepositoriesQuery.Filter.before(cursor)
+            self.client.searchRepositories(mentioning: phrase, filter: filter) {[weak self] response in
+                switch response {
+                    case let .failure(error):
+                    self?.error = String(describing: error)
+                    case let .success(results):
+                    self?.currentPageInfo = results.pageInfo
+                    self?.repositories.append(contentsOf: results.repos)
+                }
+            }
+        }
+    }
 
     func search(phrase: String) {
         self.isLoading = true
         self.client.searchRepositories(mentioning: phrase) {[weak self] response in
+            self?.isLoading = false
             switch response {
                 case let .failure(error):
                 self?.error = error.localizedDescription
                 case let .success(results):
                 self?.currentPageInfo = results.pageInfo
                 self?.repositories = results.repos
-                self?.isLoading = false
             }
         }
     }
 }
 
 final class RepositoriesListCellViewModel {
-    let userName: String
+    let url: String
     let repositoryName: String
     let userImageUrl: URL?
     let stars: NSMutableAttributedString
     
     init(with model: RepositoryDetails) {
         self.repositoryName = "Name: \(model.name)"
-        self.userName = "User: \(model.owner.login)"
+        self.url = "URL: \(model.url)"
         self.userImageUrl = URL(string: model.owner.avatarUrl)
         let mutableString = NSMutableAttributedString(attachment: NSTextAttachment(image: UIImage(systemName: "star")!))
         mutableString.append(NSAttributedString(string: " \(model.stargazers.totalCount)"))

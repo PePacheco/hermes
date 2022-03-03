@@ -6,6 +6,8 @@ class RepositoriesListViewController: UIViewController, Coordinating {
     var coordinator: Coordinator?
     private let viewModel = RepositoriesListViewModel()
     private var cancellables: [AnyCancellable] = []
+    private var currentIndex = 1
+    private var isFetching: Bool = false
     
     // MARK: - Outlets
     @IBOutlet weak var repositoriesTableView: UITableView!
@@ -48,7 +50,9 @@ class RepositoriesListViewController: UIViewController, Coordinating {
         
         viewModel.$error.sink {[weak self] error in
             DispatchQueue.main.async {
-                self?.presentAlert(message: error)
+                if !error.isEmpty {
+                    self?.presentAlert(message: error)
+                }
             }
         }.store(in: &cancellables)
     }
@@ -76,9 +80,17 @@ extension RepositoriesListViewController: UITableViewDataSource, UITableViewDele
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let repositoryDetails = viewModel.fetchRepositoryDetails(indexPath: indexPath)
-        coordinator?.eventOccurred(with: .goToRepositoryDetails(repositoryDetails: repositoryDetails))
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        tableView.deselectRow(at: indexPath, animated: true)
+//        let repositoryDetails = viewModel.fetchRepositoryDetails(indexPath: indexPath)
+//        coordinator?.eventOccurred(with: .goToRepositoryDetails(repositoryDetails: repositoryDetails))
+//    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == viewModel.repositories.count - 5 && !isFetching {
+            isFetching = true
+            viewModel.searchForward(phrase: "graphql")
+            isFetching = false
+        }
     }
 }
