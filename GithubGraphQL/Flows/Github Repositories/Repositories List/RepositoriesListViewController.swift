@@ -55,6 +55,10 @@ class RepositoriesListViewController: UIViewController, Coordinating {
                 }
             }
         }.store(in: &cancellables)
+        
+        viewModel.$isFetching.sink {[weak self] isFetching in
+            self?.isFetching = isFetching
+        }.store(in: &cancellables)
     }
     
     private func configureUI() {
@@ -81,10 +85,8 @@ extension RepositoriesListViewController: UITableViewDataSource, UITableViewDele
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == viewModel.repositories.count - 5 && !isFetching {
-            isFetching = true
+        if indexPath.row == viewModel.repositories.count - 3 && !isFetching {
             viewModel.searchForward(phrase: "graphql")
-            isFetching = false
         }
     }
 }

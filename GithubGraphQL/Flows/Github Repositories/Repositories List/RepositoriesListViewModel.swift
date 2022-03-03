@@ -10,6 +10,7 @@ final class RepositoriesListViewModel {
     @Published var isLoading: Bool = false
     @Published var error: String = ""
     @Published var repositories: [RepositoryDetails] = []
+    @Published var isFetching: Bool = false
 
     init(client: GraphQLClient = ApolloClient.shared) {
         self.client = client
@@ -27,6 +28,7 @@ final class RepositoriesListViewModel {
         guard let currentPageInfo = currentPageInfo, let nextCursor = currentPageInfo.endCursor else {
             return
         }
+        self.isFetching = true
         if currentPageInfo.hasNextPage {
             let cursor = Cursor(rawValue: nextCursor)
             let filter = SearchRepositoriesQuery.Filter.before(cursor)
@@ -37,6 +39,7 @@ final class RepositoriesListViewModel {
                     case let .success(results):
                     self?.currentPageInfo = results.pageInfo
                     self?.repositories.append(contentsOf: results.repos)
+                    self?.isFetching = false
                 }
             }
         }
