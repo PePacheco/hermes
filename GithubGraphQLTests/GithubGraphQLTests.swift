@@ -2,31 +2,50 @@
 import XCTest
 
 class GithubGraphQLTests: XCTestCase {
+    
+    var viewModel: RepositoriesListViewModel?
 
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        let mockedResponse = SearchRepositoriesQuery.Data(search: .init(
+            pageInfo: .init(startCursor: "startCursor", endCursor: nil, hasNextPage: false, hasPreviousPage: false),
+            edges: makeEdges(count: 3)
+        ))
+        viewModel = RepositoriesListViewModel(client: MockGraphQLClient<SearchRepositoriesQuery>(response: mockedResponse))
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+        viewModel = nil
     }
 
-    func testExample() {
-      let mockedResponse = SearchRepositoriesQuery.Data(search: .init(
-        pageInfo: .init(startCursor: "startCursor", endCursor: nil, hasNextPage: false, hasPreviousPage: false),
-        edges: makeEdges(count: 3)
-      ))
-      let viewModel = ViewModel(client: MockGraphQLClient<SearchRepositoriesQuery>(response: mockedResponse))
-
-      /* add assertions to validate view model state after making requests */
+    func testViewModelInitDisplayAttributes() {
+        XCTAssert(viewModel!.isLoading == false)
+        XCTAssert(viewModel!.error.isEmpty)
+    }
+    
+    func testViewModelInitSearchAttributes() {
+        XCTAssert(viewModel!.repositories.isEmpty)
+        XCTAssert(viewModel!.currentPageInfo == nil)
+    }
+    
+    func testViewModelFetching() {
+        viewModel!.search(phrase: "graphql")
+        XCTAssert(viewModel!.repositories.count == 3)
+        XCTAssert(viewModel!.currentPageInfo != nil)
+    }
+    
+    func testViewModelCellFetching() {
+        viewModel!.search(phrase: "graphql")
+        let cellViewModel = viewModel!.fetchCellViewModel(indexPath: IndexPath(row: 1, section: 1))
+        print(cellViewModel.url)
+        XCTAssert(cellViewModel.url == "URL: https://github.com/peek/makeEdges(count:_:)-1")
     }
 
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
+    func testPerformanceRepositoriesFetching() {
+        let viewModelNotMocked = RepositoriesListViewModel()
         self.measure {
-            // Put the code you want to measure the time of here.
+            viewModelNotMocked.search(phrase: "graphql")
         }
     }
 

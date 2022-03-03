@@ -80,12 +80,6 @@ extension RepositoriesListViewController: UITableViewDataSource, UITableViewDele
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        tableView.deselectRow(at: indexPath, animated: true)
-//        let repositoryDetails = viewModel.fetchRepositoryDetails(indexPath: indexPath)
-//        coordinator?.eventOccurred(with: .goToRepositoryDetails(repositoryDetails: repositoryDetails))
-//    }
-    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == viewModel.repositories.count - 5 && !isFetching {
             isFetching = true

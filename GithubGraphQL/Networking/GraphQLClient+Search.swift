@@ -47,7 +47,6 @@ extension GraphQLClient {
       resultHandler: {
         do {
           let result = try $0.get()
-            print(result)
 
           guard let data = result.data else {
             let error = result.errors.map { SearchError.graphQLErrors($0) }
