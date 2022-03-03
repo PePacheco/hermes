@@ -63,6 +63,8 @@ extension RepositoriesListViewController: UITableViewDataSource, UITableViewDele
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "Repositories-Cell", for: indexPath) as? RepositoriesListTableViewCell else {
             fatalError("Could not deque reusable cell and cast it correctly")
         }
+        let cellViewModel = viewModel.fetchCellViewModel(indexPath: indexPath)
+        cell.configureUI(cellViewModel: cellViewModel)
         return cell
     }
 }

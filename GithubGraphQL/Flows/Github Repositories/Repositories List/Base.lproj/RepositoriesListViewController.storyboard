@@ -21,30 +21,49 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Repositories-Cell" rowHeight="88" id="dGd-n4-FxA" customClass="RepositoriesListTableViewCell" customModule="GithubGraphQL" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="44.5" width="414" height="88"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Repositories-Cell" rowHeight="127" id="dGd-n4-FxA" customClass="RepositoriesListTableViewCell" customModule="GithubGraphQL" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="44.5" width="414" height="127"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dGd-n4-FxA" id="agg-Dq-wjr">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="127"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WX3-FF-jzi">
-                                                    <rect key="frame" x="30" y="21" width="354" height="46"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" id="ioJ-Ne-xIc"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="78r-SZ-nug">
+                                                    <rect key="frame" x="36" y="19" width="342" height="89"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dCj-Lj-e2j">
+                                                            <rect key="frame" x="0.0" y="0.0" width="342" height="20.5"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tkc-u0-CJ0">
+                                                            <rect key="frame" x="0.0" y="24.5" width="342" height="43.5"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M4P-e7-Pob">
+                                                            <rect key="frame" x="0.0" y="72" width="342" height="17"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="thin" pointSize="14"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="WX3-FF-jzi" firstAttribute="top" secondItem="agg-Dq-wjr" secondAttribute="topMargin" constant="10" id="GqS-lX-XnZ"/>
-                                                <constraint firstItem="WX3-FF-jzi" firstAttribute="leading" secondItem="agg-Dq-wjr" secondAttribute="leadingMargin" constant="10" id="Lou-Sr-5JN"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="WX3-FF-jzi" secondAttribute="bottom" constant="10" id="Z8t-6z-85k"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="WX3-FF-jzi" secondAttribute="trailing" constant="10" id="l9e-Wa-vM5"/>
+                                                <constraint firstItem="78r-SZ-nug" firstAttribute="top" secondItem="agg-Dq-wjr" secondAttribute="topMargin" constant="8" id="3PI-Lj-CLK"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="78r-SZ-nug" secondAttribute="bottom" constant="8" id="7x3-Et-d27"/>
+                                                <constraint firstItem="78r-SZ-nug" firstAttribute="leading" secondItem="agg-Dq-wjr" secondAttribute="leadingMargin" constant="16" id="ldK-c6-zKu"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="78r-SZ-nug" secondAttribute="trailing" constant="16" id="qHa-kT-k2p"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="repositoryNameLabel" destination="tkc-u0-CJ0" id="qb7-cE-gog"/>
+                                            <outlet property="repositoryUrlLabel" destination="M4P-e7-Pob" id="bTa-fo-gjh"/>
+                                            <outlet property="userNameLabel" destination="dCj-Lj-e2j" id="SiA-NR-j0f"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>

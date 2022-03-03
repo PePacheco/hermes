@@ -10,12 +10,20 @@ import UIKit
 
 class RepositoriesListTableViewCell: UITableViewCell {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
+    @IBOutlet weak var userNameLabel: UILabel!
+    @IBOutlet weak var repositoryNameLabel: UILabel!
+    @IBOutlet weak var repositoryUrlLabel: UILabel!
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    override func prepareForReuse() {
+        userNameLabel.text = nil
+        repositoryNameLabel = nil
+        repositoryUrlLabel = nil
+    }
+    
+    func configureUI(cellViewModel: RepositoriesListCellViewModel) {
+        userNameLabel.text = cellViewModel.userName
+        // repositoryNameLabel.text = cellViewModel.repositoryName
+        // repositoryUrlLabel.text = cellViewModel.url
     }
 
 }
