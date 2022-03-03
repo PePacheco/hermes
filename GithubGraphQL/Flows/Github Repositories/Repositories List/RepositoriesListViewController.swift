@@ -45,6 +45,12 @@ class RepositoriesListViewController: UIViewController, Coordinating {
                 }
             }
         }.store(in: &cancellables)
+        
+        viewModel.$error.sink {[weak self] error in
+            DispatchQueue.main.async {
+                self?.presentAlert(message: error)
+            }
+        }.store(in: &cancellables)
     }
     
     private func configureUI() {
@@ -68,5 +74,11 @@ extension RepositoriesListViewController: UITableViewDataSource, UITableViewDele
         let cellViewModel = viewModel.fetchCellViewModel(indexPath: indexPath)
         cell.configureUI(cellViewModel: cellViewModel)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let repositoryDetails = viewModel.fetchRepositoryDetails(indexPath: indexPath)
+        coordinator?.eventOccurred(with: .goToRepositoryDetails(repositoryDetails: repositoryDetails))
     }
 }

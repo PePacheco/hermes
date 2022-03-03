@@ -15,7 +15,11 @@ class MainCoordinator: Coordinator {
     func eventOccurred(with type: CoordinatorEvent) {
         switch type {
         case .goToRepositoryDetails(let repositoryDetails):
-            break
+            let vc: RepositoryDetailsViewController & Coordinating = RepositoryDetailsViewController.instantiate()
+            vc.coordinator = self
+            vc.configureViewModel(with: repositoryDetails)
+            
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
     

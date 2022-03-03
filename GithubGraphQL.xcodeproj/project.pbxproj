@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		6D79653A27D12C8A001BA2A4 /* RepositoriesListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D79653927D12C8A001BA2A4 /* RepositoriesListTableViewCell.swift */; };
 		6D79653D27D13620001BA2A4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6D79653C27D13620001BA2A4 /* Kingfisher */; };
+		6D79654027D13A81001BA2A4 /* RepositoryDetailsViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D79653F27D13A81001BA2A4 /* RepositoryDetailsViewController.storyboard */; };
+		6D79654227D13A99001BA2A4 /* RepositoryDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D79654127D13A99001BA2A4 /* RepositoryDetailsViewController.swift */; };
+		6D79654427D13AC0001BA2A4 /* RepositoryDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D79654327D13AC0001BA2A4 /* RepositoryDetailsViewModel.swift */; };
 		6DE08AB227D124E7003A2FA4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE08AB127D124E7003A2FA4 /* Extensions.swift */; };
 		6DE08AB827D126CB003A2FA4 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE08AB727D126CB003A2FA4 /* Coordinator.swift */; };
 		6DE08ABA27D126D5003A2FA4 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE08AB927D126D5003A2FA4 /* MainCoordinator.swift */; };
@@ -52,6 +55,9 @@
 
 /* Begin PBXFileReference section */
 		6D79653927D12C8A001BA2A4 /* RepositoriesListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoriesListTableViewCell.swift; sourceTree = "<group>"; };
+		6D79653F27D13A81001BA2A4 /* RepositoryDetailsViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RepositoryDetailsViewController.storyboard; sourceTree = "<group>"; };
+		6D79654127D13A99001BA2A4 /* RepositoryDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDetailsViewController.swift; sourceTree = "<group>"; };
+		6D79654327D13AC0001BA2A4 /* RepositoryDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDetailsViewModel.swift; sourceTree = "<group>"; };
 		6DE08AB127D124E7003A2FA4 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		6DE08AB727D126CB003A2FA4 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		6DE08AB927D126D5003A2FA4 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
@@ -111,6 +117,9 @@
 		6D79653E27D139E6001BA2A4 /* Repository Details */ = {
 			isa = PBXGroup;
 			children = (
+				6D79653F27D13A81001BA2A4 /* RepositoryDetailsViewController.storyboard */,
+				6D79654127D13A99001BA2A4 /* RepositoryDetailsViewController.swift */,
+				6D79654327D13AC0001BA2A4 /* RepositoryDetailsViewModel.swift */,
 			);
 			path = "Repository Details";
 			sourceTree = "<group>";
@@ -359,6 +368,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D79654027D13A81001BA2A4 /* RepositoryDetailsViewController.storyboard in Resources */,
 				D9A10FAA216C4AFD007998EC /* LaunchScreen.storyboard in Resources */,
 				D9A10FA7216C4AFD007998EC /* Assets.xcassets in Resources */,
 				D9A10FEB216C77CD007998EC /* Queries.graphql in Resources */,
@@ -409,6 +419,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D79654427D13AC0001BA2A4 /* RepositoryDetailsViewModel.swift in Sources */,
 				D8F7604D27C7295500B1AB58 /* GraphQLClient+Search.swift in Sources */,
 				6D79653A27D12C8A001BA2A4 /* RepositoriesListTableViewCell.swift in Sources */,
 				6DE08AB227D124E7003A2FA4 /* Extensions.swift in Sources */,
@@ -419,6 +430,7 @@
 				D8F7605127C72B1700B1AB58 /* ApolloClient.swift in Sources */,
 				D9C8E128216DBA11002A64FC /* API.swift in Sources */,
 				D8F7604B27C724F900B1AB58 /* API+Abstractions.swift in Sources */,
+				6D79654227D13A99001BA2A4 /* RepositoryDetailsViewController.swift in Sources */,
 				D8F7605327C72F1400B1AB58 /* RepositoriesListViewModel.swift in Sources */,
 				D9A10FA0216C4AFD007998EC /* AppDelegate.swift in Sources */,
 			);

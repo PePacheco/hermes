@@ -13,13 +13,13 @@ class RepositoriesListTableViewCell: UITableViewCell {
 
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var repositoryNameLabel: UILabel!
-    @IBOutlet weak var repositoryUrlLabel: UILabel!
+    @IBOutlet weak var repositoryRating: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
     
     override func prepareForReuse() {
         userNameLabel.text = nil
         repositoryNameLabel.text = nil
-        repositoryUrlLabel.text = nil
+        repositoryRating.text = nil
         userImageView.image = nil
     }
     
@@ -27,7 +27,7 @@ class RepositoriesListTableViewCell: UITableViewCell {
         userImageView.kf.setImage(with: cellViewModel.userImageUrl)
         userNameLabel.text = cellViewModel.userName
         repositoryNameLabel.text = cellViewModel.repositoryName
-        repositoryUrlLabel.text = cellViewModel.url
+        repositoryRating.attributedText = cellViewModel.stars
     }
 
 }
