@@ -11,11 +11,12 @@ class RepositoriesListViewController: UIViewController, Coordinating {
     
     // MARK: - Outlets
     @IBOutlet weak var repositoriesTableView: UITableView!
-    
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        configureRefresh()
         bindViewModel()
         viewModel.search(phrase: "graphql")
     }
@@ -61,12 +62,22 @@ class RepositoriesListViewController: UIViewController, Coordinating {
         }.store(in: &cancellables)
     }
     
+    private func configureRefresh() {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        self.repositoriesTableView.refreshControl = refresh
+    }
+    
     private func configureUI() {
         title = "Repositories List"
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
         repositoriesTableView.dataSource = self
         repositoriesTableView.delegate = self
+    }
+    
+    @objc private func handleRefresh() {
+        viewModel.search(phrase: "graphql")
     }
 }
 
