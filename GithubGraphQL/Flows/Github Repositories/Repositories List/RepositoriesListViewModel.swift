@@ -36,16 +36,27 @@ final class RepositoriesListViewModel {
                 let filter = SearchRepositoriesQuery.Filter.before(cursor)
                 self.client.searchRepositories(mentioning: phrase, filter: filter) {[weak self] response in
                     switch response {
-                        case let .failure(error):
-                        self?.error = String(describing: error)
+                        case .failure:
+                        self?.error = "There are no more repositories available"
                         case let .success(results):
                         self?.currentPageInfo = results.pageInfo
                         self?.repositories.append(contentsOf: results.repos)
+                        self?.repositories = removeDuplicateElements(repositories: self?.repositories ?? [])
                         self?.isFetching = false
                     }
                 }
             }
         }
+    }
+    
+    private func removeDuplicateElements(repositories: [RepositoryDetails]) -> [RepositoryDetails] {
+        var uniqueRepositories = [RepositoryDetails]()
+        for repository in repositories {
+            if !uniqueRepositories.contains(where: { $0.name == repository.name && $0.owner.login == repository.owner.login && $0.stargazers.totalCount == repository.stargazers.totalCount  }) {
+                uniqueRepositories.append(repository)
+            }
+        }
+        return uniqueRepositories
     }
 
     func search(phrase: String) {
