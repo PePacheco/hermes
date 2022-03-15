@@ -57,7 +57,7 @@ class RepositoriesListViewController: UIViewController, Coordinating {
             }
         }.store(in: &cancellables)
         
-        viewModel.$isFetching.sink {[weak self] isFetching in
+        viewModel.$isFetchingForward.sink {[weak self] isFetching in
             self?.isFetching = isFetching
         }.store(in: &cancellables)
     }

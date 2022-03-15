@@ -5,13 +5,13 @@ import UIKit
 final class RepositoriesListViewModel {
     
     private let client: GraphQLClient
-    private let queue = DispatchQueue(label: "ViewModelQueue", target: .global())
+//    private let queue = DispatchQueue(label: "ViewModelQueue", target: .global())
     var currentPageInfo: SearchRepositoriesQuery.Data.Search.PageInfo?
     
     @Published var isLoading: Bool = false
     @Published var error: String = ""
     @Published var repositories: [RepositoryDetails] = []
-    @Published var isFetching: Bool = false
+    @Published var isFetchingForward: Bool = false
 
     init(client: GraphQLClient = ApolloClient.shared) {
         self.client = client
@@ -26,24 +26,23 @@ final class RepositoriesListViewModel {
     }
     
     func searchForward(phrase: String) {
-        queue.async { [self] in
-            guard let currentPageInfo = currentPageInfo, let nextCursor = currentPageInfo.endCursor else {
-                return
-            }
-            self.isFetching = true
-            if currentPageInfo.hasNextPage {
-                let cursor = Cursor(rawValue: nextCursor)
-                let filter = SearchRepositoriesQuery.Filter.before(cursor)
-                self.client.searchRepositories(mentioning: phrase, filter: filter) {[weak self] response in
-                    switch response {
-                        case .failure:
-                        self?.error = "There are no more repositories available"
-                        case let .success(results):
-                        self?.currentPageInfo = results.pageInfo
-                        self?.repositories.append(contentsOf: results.repos)
-                        self?.repositories = removeDuplicateElements(repositories: self?.repositories ?? [])
-                        self?.isFetching = false
-                    }
+        guard let currentPageInfo = currentPageInfo, let nextCursor = currentPageInfo.endCursor else {
+            return
+        }
+        self.isFetchingForward = true
+        if currentPageInfo.hasNextPage {
+            let cursor = Cursor(rawValue: nextCursor)
+            let filter = SearchRepositoriesQuery.Filter.before(cursor)
+            self.client.searchRepositories(mentioning: phrase, filter: filter) {[weak self] response in
+                guard let self = self else { return }
+                switch response {
+                    case .failure:
+                    self.error = "There are no more repositories available"
+                    case .success(let results):
+                    self.currentPageInfo = results.pageInfo
+                    self.repositories.append(contentsOf: results.repos)
+                    self.repositories = self.removeDuplicateElements(repositories: self.repositories)
+                    self.isFetchingForward = false
                 }
             }
         }
@@ -66,7 +65,8 @@ final class RepositoriesListViewModel {
             switch response {
                 case .failure:
                 self?.error = "The data could not be fetched, something went wrong"
-                case let .success(results):
+                case .success(let results):
+                print(results)
                 self?.currentPageInfo = results.pageInfo
                 self?.repositories = results.repos
             }

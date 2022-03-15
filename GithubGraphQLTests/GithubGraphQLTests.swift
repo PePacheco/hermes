@@ -38,7 +38,7 @@ class GithubGraphQLTests: XCTestCase {
     func testViewModelCellFetching() {
         viewModel!.search(phrase: "graphql")
         let cellViewModel = viewModel!.fetchCellViewModel(indexPath: IndexPath(row: 1, section: 1))
-        print(cellViewModel.url)
+        XCTAssert(cellViewModel.repositoryName == "Name: makeEdges(count:_:)-1")
         XCTAssert(cellViewModel.url == "URL: https://github.com/peek/makeEdges(count:_:)-1")
     }
 
