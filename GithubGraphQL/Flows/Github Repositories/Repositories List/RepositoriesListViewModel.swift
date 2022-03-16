@@ -48,7 +48,7 @@ final class RepositoriesListViewModel {
         }
     }
     
-    private func removeDuplicateElements(repositories: [RepositoryDetails]) -> [RepositoryDetails] {
+    func removeDuplicateElements(repositories: [RepositoryDetails]) -> [RepositoryDetails] {
         var uniqueRepositories = [RepositoryDetails]()
         for repository in repositories {
             if !uniqueRepositories.contains(where: { $0.name == repository.name && $0.owner.login == repository.owner.login && $0.stargazers.totalCount == repository.stargazers.totalCount  }) {
