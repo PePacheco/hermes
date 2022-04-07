@@ -9,7 +9,7 @@
 import UIKit
 
 enum CoordinatorEvent {
-    
+    case goToDetails(repository: RepositoryDetails)
 }
 
 protocol Coordinator {
