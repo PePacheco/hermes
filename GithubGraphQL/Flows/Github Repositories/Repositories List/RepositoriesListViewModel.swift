@@ -1,35 +1,46 @@
 import Apollo
-import Combine
 import UIKit
+import RxSwift
+import RxRelay
 
 final class RepositoriesListViewModel {
     
     private let client: GraphQLClient
-//    private let queue = DispatchQueue(label: "ViewModelQueue", target: .global())
     var currentPageInfo: SearchRepositoriesQuery.Data.Search.PageInfo?
     
-    @Published var isLoading: Bool = false
-    @Published var error: String = ""
-    @Published var repositories: [RepositoryDetails] = []
-    @Published var isFetchingForward: Bool = false
+    private var isLoading: BehaviorRelay<Bool> = .init(value: false)
+    var isLoadingObservable: Observable<Bool> {
+        return self.isLoading.asObservable()
+    }
+    
+    private var repositories: BehaviorRelay<[RepositoryDetails]> = .init(value: [])
+    var repositoriesObservable: Observable<[RepositoryDetails]> {
+        return self.repositories.asObservable()
+    }
+    
+    private var error: BehaviorRelay<String> = .init(value: "")
+    var errorObservable: Observable<String> {
+        return error.asObservable()
+    }
+    
+    private var isFetchingForward: BehaviorRelay<Bool> = .init(value: false)
+    var isFetchingForwardObservable: Observable<Bool> {
+        return isFetchingForward.asObservable()
+    }
 
     init(client: GraphQLClient = ApolloClient.shared) {
         self.client = client
     }
     
-    func fetchCellViewModel(indexPath: IndexPath) -> RepositoriesListCellViewModel {
-        return RepositoriesListCellViewModel(with: repositories[indexPath.row])
-    }
-    
-    func fetchRepositoryDetails(indexPath: IndexPath) -> RepositoryDetails {
-        return repositories[indexPath.row]
+    func getRepositoriesCount() -> Int {
+        return self.repositories.value.count
     }
     
     func searchForward(phrase: String) {
         guard let currentPageInfo = currentPageInfo, let nextCursor = currentPageInfo.endCursor else {
             return
         }
-        self.isFetchingForward = true
+        self.isFetchingForward.accept(true)
         if currentPageInfo.hasNextPage {
             let cursor = Cursor(rawValue: nextCursor)
             let filter = SearchRepositoriesQuery.Filter.before(cursor)
@@ -37,12 +48,13 @@ final class RepositoriesListViewModel {
                 guard let self = self else { return }
                 switch response {
                     case .failure:
-                    self.error = "There are no more repositories available"
+                    self.error.accept("There are no more repositories available")
                     case .success(let results):
                     self.currentPageInfo = results.pageInfo
-                    self.repositories.append(contentsOf: results.repos)
-                    self.repositories = self.removeDuplicateElements(repositories: self.repositories)
-                    self.isFetchingForward = false
+                    let allRepositories = self.repositories.value + results.repos
+                    let repositoriesNotDoubled = self.removeDuplicateElements(repositories: allRepositories)
+                    self.repositories.accept(repositoriesNotDoubled)
+                    self.isFetchingForward.accept(false)
                 }
             }
         }
@@ -59,18 +71,21 @@ final class RepositoriesListViewModel {
     }
 
     func search(phrase: String) {
-        self.isLoading = true
+        self.isLoading.accept(true)
         self.client.searchRepositories(mentioning: phrase) {[weak self] response in
-            self?.isLoading = false
+            self?.isLoading.accept(false)
             switch response {
                 case .failure:
-                self?.error = "The data could not be fetched, something went wrong"
+                self?.error.accept("The data could not be fetched, something went wrong")
                 case .success(let results):
-                print(results)
                 self?.currentPageInfo = results.pageInfo
-                self?.repositories = results.repos
+                self?.repositories.accept(results.repos)
             }
         }
+    }
+    
+    func fetchCellViewModel(at indexPath: IndexPath) -> RepositoriesListCellViewModel {
+        return RepositoriesListCellViewModel(with: self.repositories.value[indexPath.row])
     }
 }
 

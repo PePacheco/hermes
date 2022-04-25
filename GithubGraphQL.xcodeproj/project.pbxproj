@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0551209B280EF2CB00C2B1F7 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 0551209A280EF2CB00C2B1F7 /* RxCocoa */; };
+		0551209D280EF2CB00C2B1F7 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0551209C280EF2CB00C2B1F7 /* RxSwift */; };
 		6D79653A27D12C8A001BA2A4 /* RepositoriesListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D79653927D12C8A001BA2A4 /* RepositoriesListTableViewCell.swift */; };
 		6D79653D27D13620001BA2A4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6D79653C27D13620001BA2A4 /* Kingfisher */; };
 		6DE08AB227D124E7003A2FA4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE08AB127D124E7003A2FA4 /* Extensions.swift */; };
@@ -87,6 +89,8 @@
 			files = (
 				6D79653D27D13620001BA2A4 /* Kingfisher in Frameworks */,
 				D806B6B527C71F1C006F594D /* Apollo in Frameworks */,
+				0551209D280EF2CB00C2B1F7 /* RxSwift in Frameworks */,
+				0551209B280EF2CB00C2B1F7 /* RxCocoa in Frameworks */,
 				D806B6B727C71F1C006F594D /* ApolloSQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,6 +262,8 @@
 				D806B6B427C71F1C006F594D /* Apollo */,
 				D806B6B627C71F1C006F594D /* ApolloSQLite */,
 				6D79653C27D13620001BA2A4 /* Kingfisher */,
+				0551209A280EF2CB00C2B1F7 /* RxCocoa */,
+				0551209C280EF2CB00C2B1F7 /* RxSwift */,
 			);
 			productName = GithubGraphQL;
 			productReference = D9A10F9C216C4AFD007998EC /* GithubGraphQL.app */;
@@ -334,6 +340,7 @@
 			packageReferences = (
 				D806B6B327C71F1C006F594D /* XCRemoteSwiftPackageReference "apollo-ios" */,
 				6D79653B27D13620001BA2A4 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				05512099280EF2CA00C2B1F7 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			productRefGroup = D9A10F9D216C4AFD007998EC /* Products */;
 			projectDirPath = "";
@@ -743,6 +750,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		05512099280EF2CA00C2B1F7 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		6D79653B27D13620001BA2A4 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -762,6 +777,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0551209A280EF2CB00C2B1F7 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05512099280EF2CA00C2B1F7 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		0551209C280EF2CB00C2B1F7 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05512099280EF2CA00C2B1F7 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
 		6D79653C27D13620001BA2A4 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6D79653B27D13620001BA2A4 /* XCRemoteSwiftPackageReference "Kingfisher" */;

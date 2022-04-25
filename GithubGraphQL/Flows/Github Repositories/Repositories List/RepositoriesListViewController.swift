@@ -1,5 +1,6 @@
 import UIKit
-import Combine
+import RxSwift
+import RxCocoa
 
 class RepositoriesListViewController: UIViewController, Coordinating {
 
@@ -8,6 +9,7 @@ class RepositoriesListViewController: UIViewController, Coordinating {
     private var cancellables: [AnyCancellable] = []
     private var currentIndex = 1
     private var isFetching: Bool = false
+    private let disposeBag = DisposeBag()
     
     // MARK: - Outlets
     @IBOutlet weak var repositoriesTableView: UITableView!
@@ -17,6 +19,7 @@ class RepositoriesListViewController: UIViewController, Coordinating {
         super.viewDidLoad()
         configureUI()
         configureRefresh()
+        configureTableView()
         bindViewModel()
         viewModel.search(phrase: "graphql")
     }
@@ -33,13 +36,7 @@ class RepositoriesListViewController: UIViewController, Coordinating {
     // MARK: - Private functions
     
     private func bindViewModel() {
-        viewModel.$repositories.sink {[weak self] repositories in
-            DispatchQueue.main.async {
-                self?.repositoriesTableView.reloadData()
-            }
-        }.store(in: &cancellables)
-        
-        viewModel.$isLoading.sink {[weak self] isLoading in
+        viewModel.isLoadingObservable.bind { [weak self] isLoading in
             DispatchQueue.main.async {
                 if isLoading {
                     self?.presentLoadingScreen(completion: nil)
@@ -47,19 +44,20 @@ class RepositoriesListViewController: UIViewController, Coordinating {
                     self?.dismiss(animated: true, completion: nil)
                 }
             }
-        }.store(in: &cancellables)
+        }.disposed(by: disposeBag)
+
         
-        viewModel.$error.sink {[weak self] error in
+        viewModel.errorObservable.bind {[weak self] error in
             DispatchQueue.main.async {
                 if !error.isEmpty {
                     self?.presentAlert(message: error)
                 }
             }
-        }.store(in: &cancellables)
+        }.disposed(by: disposeBag)
         
-        viewModel.$isFetchingForward.sink {[weak self] isFetching in
+        viewModel.isFetchingForwardObservable.bind {[weak self] isFetching in
             self?.isFetching = isFetching
-        }.store(in: &cancellables)
+        }.disposed(by: disposeBag)
     }
     
     private func configureRefresh() {
@@ -72,32 +70,24 @@ class RepositoriesListViewController: UIViewController, Coordinating {
         title = "Repositories List"
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
-        repositoriesTableView.dataSource = self
-        repositoriesTableView.delegate = self
+    }
+    
+    private func configureTableView() {
+        viewModel.repositoriesObservable.bind(to: repositoriesTableView.rx.items(cellIdentifier: "Repositories-Cell", cellType: RepositoriesListTableViewCell.self)) { [weak self] row, model, cell in
+            guard let self = self else { return }
+            let cellViewModel = self.viewModel.fetchCellViewModel(at: IndexPath(row: row, section: 0))
+            cell.configureUI(cellViewModel: cellViewModel)
+        }.disposed(by: disposeBag)
+        
+        repositoriesTableView.rx.willDisplayCell.subscribe(onNext: {[weak self] cell, indexPath in
+            guard let self = self else { return }
+            if indexPath.row == self.viewModel.getRepositoriesCount() - 3 && !self.isFetching {
+                self.viewModel.searchForward(phrase: "graphql")
+            }
+        }).disposed(by: disposeBag)
     }
     
     @objc private func handleRefresh() {
         viewModel.search(phrase: "graphql")
-    }
-}
-
-extension RepositoriesListViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.repositories.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Repositories-Cell", for: indexPath) as? RepositoriesListTableViewCell else {
-            fatalError("Could not deque reusable cell and cast it correctly")
-        }
-        let cellViewModel = viewModel.fetchCellViewModel(indexPath: indexPath)
-        cell.configureUI(cellViewModel: cellViewModel)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == viewModel.repositories.count - 3 && !isFetching {
-            viewModel.searchForward(phrase: "graphql")
-        }
     }
 }
