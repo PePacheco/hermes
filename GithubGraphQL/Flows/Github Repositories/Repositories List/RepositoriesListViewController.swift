@@ -6,7 +6,6 @@ class RepositoriesListViewController: UIViewController, Coordinating {
 
     var coordinator: Coordinator?
     private let viewModel = RepositoriesListViewModel()
-    private var cancellables: [AnyCancellable] = []
     private var currentIndex = 1
     private var isFetching: Bool = false
     private let disposeBag = DisposeBag()
@@ -23,15 +22,6 @@ class RepositoriesListViewController: UIViewController, Coordinating {
         bindViewModel()
         viewModel.search(phrase: "graphql")
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    deinit {
-        cancellables.forEach { $0.cancel() }
-    }
     
     // MARK: - Private functions
     
@@ -44,7 +34,8 @@ class RepositoriesListViewController: UIViewController, Coordinating {
                     self?.dismiss(animated: true, completion: nil)
                 }
             }
-        }.disposed(by: disposeBag)
+        }
+        .disposed(by: disposeBag)
 
         
         viewModel.errorObservable.bind {[weak self] error in
@@ -53,11 +44,13 @@ class RepositoriesListViewController: UIViewController, Coordinating {
                     self?.presentAlert(message: error)
                 }
             }
-        }.disposed(by: disposeBag)
+        }
+        .disposed(by: disposeBag)
         
         viewModel.isFetchingForwardObservable.bind {[weak self] isFetching in
             self?.isFetching = isFetching
-        }.disposed(by: disposeBag)
+        }
+        .disposed(by: disposeBag)
     }
     
     private func configureRefresh() {
@@ -77,14 +70,16 @@ class RepositoriesListViewController: UIViewController, Coordinating {
             guard let self = self else { return }
             let cellViewModel = self.viewModel.fetchCellViewModel(at: IndexPath(row: row, section: 0))
             cell.configureUI(cellViewModel: cellViewModel)
-        }.disposed(by: disposeBag)
+        }
+        .disposed(by: disposeBag)
         
         repositoriesTableView.rx.willDisplayCell.subscribe(onNext: {[weak self] cell, indexPath in
             guard let self = self else { return }
             if indexPath.row == self.viewModel.getRepositoriesCount() - 3 && !self.isFetching {
                 self.viewModel.searchForward(phrase: "graphql")
             }
-        }).disposed(by: disposeBag)
+        })
+        .disposed(by: disposeBag)
     }
     
     @objc private func handleRefresh() {
